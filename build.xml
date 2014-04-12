@@ -1,0 +1,33 @@
+<!-- My first ant script! :) -->
+<project name="Asteroids" default="dist">
+    <!-- Properties for use later in the script, accessible through ${property_name} -->
+    <property name="src" location="src" />
+    <property name="build" location="build" />
+    <property name="dist" location="dist" />
+
+    <!-- A target to initialize stuff for the build process -->
+    <target name="init">
+        <mkdir dir="${build}" />
+    </target>
+
+    <!-- The actual compilation step -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" includeantruntime="false" />
+    </target>
+
+    <!-- Distribution target, which will package into a JAR -->
+    <target name="dist" depends="compile">
+        <mkdir dir="${dist}" />
+        <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
+            <manifest>
+                <attribute name="Main-Class" value="asteroids.App" />
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Cleanup task, pretty simple -->
+    <target name="clean">
+        <delete dir="${build}" />
+        <delete dir="${dist}" />
+    </target>
+</project>
