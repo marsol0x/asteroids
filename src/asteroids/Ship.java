@@ -15,7 +15,7 @@ public class Ship extends Entity implements KeyListener {
     private int x, y, w, h;
 
     public Ship(int x, int y) {
-        velocity = new PhysVector(0.0, 0.0);
+        velocity = new Vector2(0.0, 0.0);
         this.x = x;
         this.y = y;
         this.w = 15;

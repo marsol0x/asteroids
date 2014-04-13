@@ -1,10 +1,10 @@
 package asteroids;
 
-public class PhysVector {
+public class Vector2 {
     private double magnitude;
     private double direction; // In radians relative to object center
 
-    public PhysVector(double magnitude, double direction) {
+    public Vector2(double magnitude, double direction) {
         this.magnitude = magnitude;
         this.direction = direction;
     }
