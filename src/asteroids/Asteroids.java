@@ -17,7 +17,7 @@ public class Asteroids extends JPanel implements KeyListener {
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(500, 500));
 
-        player = new Ship((int) getPreferredSize().getWidth() / 2, (int) getPreferredSize().getHeight() / 2);
+        player = new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
     }
 
     public void paint(Graphics g) {

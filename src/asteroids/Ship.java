@@ -8,26 +8,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.lang.Math;
 
 public class Ship extends Entity implements KeyListener {
-    private static final double ROTATE_VALUE = Math.PI / 8.0;
-    private int x, y, w, h;
+    private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
+    private Vector2 position;
+    private Vector2 velocity;
+    private Vector2 facing;
+    private int w, h;
 
-    public Ship(int x, int y) {
+    public Ship(double x, double y) {
+        position = new Vector2(x, y);
         velocity = new Vector2(0.0, 0.0);
-        this.x = x;
-        this.y = y;
+        facing = new Vector2(1.0, 0.0);
         this.w = 15;
         this.h = 25;
-    }
-
-    public void rotate(double rads) {
-        double direction = velocity.getDirection();
-        if (Math.abs(direction) + rads > Math.PI * 2) {
-            direction = 0.0;
-        }
-        velocity.setDirection(direction + rads);
     }
 
     public void draw(Graphics2D g) {
@@ -38,7 +32,7 @@ public class Ship extends Entity implements KeyListener {
         AffineTransform transform = g.getTransform();
         // Rotate by ship rotation
         Rectangle2D bounds = shipPolygon.getBounds2D();
-        g.rotate(velocity.getDirection(), bounds.getX() + (bounds.getWidth() / 2), bounds.getY() + (bounds.getHeight() / 2));
+        g.rotate(facing.getAngleRad(), bounds.getX() + (bounds.getWidth() / 2), bounds.getY() + (bounds.getHeight() / 2));
 
         // Draw the ship!
         g.setColor(Color.WHITE);
@@ -51,11 +45,13 @@ public class Ship extends Entity implements KeyListener {
 
     // Get X Points to draw the ship
     private int[] getXPoints() {
+        int x = (int) position.x;
         return new int[]{x, x - (w / 2), x + (w / 2)};
     }
 
     // Get Y Points to draw the ship
     private int[] getYPoints() {
+        int y = (int) position.y;
         return new int[]{y - (h / 2), y + (h / 2), y + (h / 2)};
     }
 
@@ -64,10 +60,10 @@ public class Ship extends Entity implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()){
             case KeyEvent.VK_LEFT:
-                rotate(-ROTATE_VALUE);
+                facing.rotate(-ROTATE_VALUE);
                 break;
             case KeyEvent.VK_RIGHT:
-                rotate(ROTATE_VALUE);
+                facing.rotate(ROTATE_VALUE);
                 break;
         }
     }
