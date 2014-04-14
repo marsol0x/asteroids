@@ -25,7 +25,13 @@ public class Ship extends Entity implements KeyListener {
         this.w = 15;
         this.h = 25;
 
-        shipPolygon = new Polygon(getXPoints(), getYPoints(), 3);
+        shipPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
+        shipPolygon.translate((int) position.x, (int) position.y);
+    }
+
+    public void move() {
+        position.add(velocity);
+        shipPolygon.translate((int) velocity.x, (int) velocity.y);
     }
 
     public void draw(Graphics2D g) {
@@ -44,18 +50,6 @@ public class Ship extends Entity implements KeyListener {
 
         // Reset transform
         g.setTransform(transform);
-    }
-
-    // Get X Points to draw the ship
-    private int[] getXPoints() {
-        int x = (int) position.x;
-        return new int[]{x, x - (w / 2), x + (w / 2)};
-    }
-
-    // Get Y Points to draw the ship
-    private int[] getYPoints() {
-        int y = (int) position.y;
-        return new int[]{y - (h / 2), y + (h / 2), y + (h / 2)};
     }
 
     // Handle user input
