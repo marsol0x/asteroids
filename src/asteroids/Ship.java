@@ -34,6 +34,13 @@ public class Ship extends Entity implements KeyListener {
         shipPolygon.translate((int) velocity.x, (int) velocity.y);
     }
 
+    private void thrust() {
+        Vector2 acceleration = new Vector2(0.0, -1.0);
+        acceleration.rotateRad(facing.getAngleRad());
+        System.out.println("(" + acceleration.x + ", " + acceleration.y + ")");
+        velocity.add(acceleration);
+    }
+
     public void draw(Graphics2D g) {
         BasicStroke stroke = new BasicStroke();
 
@@ -61,6 +68,9 @@ public class Ship extends Entity implements KeyListener {
                 break;
             case KeyEvent.VK_RIGHT:
                 facing.rotate(ROTATE_VALUE);
+                break;
+            case KeyEvent.VK_UP:
+                thrust();
                 break;
         }
     }
