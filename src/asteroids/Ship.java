@@ -16,16 +16,19 @@ public class Ship extends Entity implements KeyListener {
     private Vector2 facing;
     private int w, h;
 
+    private Polygon shipPolygon;
+
     public Ship(double x, double y) {
         position = new Vector2(x, y);
         velocity = new Vector2(0.0, 0.0);
         facing = new Vector2(1.0, 0.0);
         this.w = 15;
         this.h = 25;
+
+        shipPolygon = new Polygon(getXPoints(), getYPoints(), 3);
     }
 
     public void draw(Graphics2D g) {
-        Polygon shipPolygon = new Polygon(getXPoints(), getYPoints(), 3);
         BasicStroke stroke = new BasicStroke();
 
         // Save current transform (rotation)
