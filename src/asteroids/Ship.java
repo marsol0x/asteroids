@@ -11,9 +11,6 @@ import java.awt.geom.Rectangle2D;
 
 public class Ship extends Entity implements KeyListener {
     private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
-    private Vector2 position;
-    private Vector2 velocity;
-    private Vector2 facing;
     private int w, h;
 
     private Polygon shipPolygon;
@@ -37,7 +34,6 @@ public class Ship extends Entity implements KeyListener {
     private void thrust() {
         Vector2 acceleration = new Vector2(0.0, -1.0);
         acceleration.rotateRad(facing.getAngleRad());
-        System.out.println("(" + acceleration.x + ", " + acceleration.y + ")");
         velocity.add(acceleration);
     }
 
