@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.InterruptedException;
+import java.util.Vector;
 import javax.swing.JPanel;
 
 public class Asteroids extends JPanel implements KeyListener {
@@ -18,6 +20,7 @@ public class Asteroids extends JPanel implements KeyListener {
     private static Asteroids instance = null;
 
     private Ship player;
+    private Vector<Satellite> satellites;
     private boolean running;
 
     public Asteroids() {
@@ -37,7 +40,10 @@ public class Asteroids extends JPanel implements KeyListener {
     }
 
     private void newGame() {
+        satellites = new Vector<Satellite>();
+
         player = new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
+        satellites.add(new Satellite(10, 10));
         running = true;
     }
 
@@ -48,6 +54,7 @@ public class Asteroids extends JPanel implements KeyListener {
             long start = System.nanoTime();
 
             player.move();
+            for (Satellite s : satellites) { s.move(); }
             repaint();
 
             long total = System.nanoTime() - start;
@@ -60,7 +67,11 @@ public class Asteroids extends JPanel implements KeyListener {
 
     public void paint(Graphics g) {
         super.paint(g);
-        player.draw((Graphics2D) g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        player.draw(g2);
+        for (Satellite s : satellites) { s.draw(g2); }
     }
 
     @Override

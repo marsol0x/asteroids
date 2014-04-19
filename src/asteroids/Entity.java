@@ -38,7 +38,5 @@ abstract public class Entity {
         if (position.y > d.getHeight()) {
             position.set(position.x, 0.0);
         }
-
-        System.out.println("(" + velocity.x + ", " + velocity.y + ")");
     }
 }

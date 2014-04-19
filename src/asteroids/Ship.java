@@ -13,7 +13,6 @@ public class Ship extends Entity implements KeyListener {
     private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
     private int w, h;
 
-    private Vector2 prevPosition;
     private Polygon shipPolygon;
 
     public Ship(double x, double y) {
