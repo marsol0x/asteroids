@@ -13,10 +13,12 @@ public class Ship extends Entity implements KeyListener {
     private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
     private int w, h;
 
+    private Vector2 prevPosition;
     private Polygon shipPolygon;
 
     public Ship(double x, double y) {
         position = new Vector2(x, y);
+        prevPosition = new Vector2(x, y);
         velocity = new Vector2(0.0, 0.0);
         facing = new Vector2(1.0, 0.0);
         this.w = 15;
@@ -24,11 +26,6 @@ public class Ship extends Entity implements KeyListener {
 
         shipPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
         shipPolygon.translate((int) position.x, (int) position.y);
-    }
-
-    public void move() {
-        position.add(velocity);
-        shipPolygon.translate((int) velocity.x, (int) velocity.y);
     }
 
     private void thrust() {
@@ -42,6 +39,12 @@ public class Ship extends Entity implements KeyListener {
 
         // Save current transform (rotation)
         AffineTransform transform = g.getTransform();
+
+        // Position the ship
+        shipPolygon.translate((int) (position.x - prevPosition.x), (int) (position.y - prevPosition.y));
+        // Reset translation vector after positioning the ship
+        prevPosition.set(position.x, position.y);
+
         // Rotate by ship rotation
         Rectangle2D bounds = shipPolygon.getBounds2D();
         g.rotate(facing.getAngleRad(), bounds.getX() + (bounds.getWidth() / 2), bounds.getY() + (bounds.getHeight() / 2));

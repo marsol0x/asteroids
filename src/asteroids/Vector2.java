@@ -15,6 +15,9 @@ public class Vector2 {
         this.y = y;
     }
 
+    public void setX(double x) { this.x = x; }
+    public void setY(double y) { this.y = y; }
+
     public Vector2 add(Vector2 v) {
         x = x + v.x;
         y = y + v.y;

@@ -13,14 +13,27 @@ public class Asteroids extends JPanel implements KeyListener {
     public static final long serialVersionUID = 455;
 
     private static final long MAX_FPS = 30;
+    private static final int w = 500;
+    private static final int h = 500;
+    private static Asteroids instance = null;
+
     private Ship player;
     private boolean running;
 
     public Asteroids() {
+        // Use a static instance so that we can check state
+        if (Asteroids.instance == null) {
+            Asteroids.instance = this;
+        }
+
         setBackground(Color.BLACK);
-        setPreferredSize(new Dimension(500, 500));
+        setPreferredSize(new Dimension(w, h));
 
         newGame();
+    }
+
+    public static Asteroids getInstance() {
+        return instance;
     }
 
     private void newGame() {
@@ -33,9 +46,9 @@ public class Asteroids extends JPanel implements KeyListener {
     private void gameLoop() {
         while(running) {
             long start = System.nanoTime();
-            repaint();
 
             player.move();
+            repaint();
 
             long total = System.nanoTime() - start;
             if ((total / 1000000) < (1000 / MAX_FPS)) {
@@ -53,7 +66,6 @@ public class Asteroids extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         player.keyPressed(e);
-        repaint();
     }
 
     @Override
