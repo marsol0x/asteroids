@@ -27,16 +27,16 @@ abstract public class Entity {
         position.add(velocity);
 
         if (position.x < 0) {
-            position.set(d.getWidth(), position.y);
+            position.setX(d.getWidth());
         }
         if (position.y < 0) {
-            position.set(position.x, d.getHeight());
+            position.setY(d.getHeight());
         }
         if (position.x > d.getWidth()) {
-            position.set(0.0, position.y);
+            position.setX(position.x - d.getWidth());
         }
         if (position.y > d.getHeight()) {
-            position.set(position.x, 0.0);
+            position.setY(position.y - d.getHeight());
         }
     }
 }
