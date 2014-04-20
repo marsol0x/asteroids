@@ -2,6 +2,7 @@ package asteroids;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.lang.Math;
 
 abstract public class Entity {
@@ -12,6 +13,8 @@ abstract public class Entity {
     protected Vector2 prevPosition;
 
     abstract public void draw(Graphics2D g);
+    abstract public boolean collided(Entity e);
+    abstract public Shape getShape();
 
     public void move() {
         Dimension d = Asteroids.getInstance().getSize();

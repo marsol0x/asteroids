@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
@@ -11,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 
 public class Ship extends Entity implements KeyListener {
     private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
+    private boolean dead;
     private int w, h;
 
     private Polygon shipPolygon;
@@ -20,6 +22,7 @@ public class Ship extends Entity implements KeyListener {
         prevPosition = new Vector2(x, y);
         velocity = new Vector2(0.0, 0.0);
         facing = new Vector2(1.0, 0.0);
+        dead = false;
         this.w = 15;
         this.h = 25;
 
@@ -33,7 +36,24 @@ public class Ship extends Entity implements KeyListener {
         velocity.add(acceleration);
     }
 
+    public void kill() {
+        dead = true;
+        // Explode!
+        ParticleGenerator.getInstance().generateExplosion(prevPosition.x, prevPosition.y);
+    }
+
+    public boolean isDead() { return dead; }
+
+    public final Vector2 getPosition() { return position; }
+    public final Shape getShape() { return shipPolygon; }
+
+    public void move() {
+        if (!dead) { super.move(); }
+    }
+
     public void draw(Graphics2D g) {
+        if (dead) return; // Don't draw if dead
+
         BasicStroke stroke = new BasicStroke();
 
         // Save current transform (rotation)
@@ -56,6 +76,8 @@ public class Ship extends Entity implements KeyListener {
         // Reset transform
         g.setTransform(transform);
     }
+
+    public boolean collided(Entity e) { return false; }
 
     // Handle user input
     @Override

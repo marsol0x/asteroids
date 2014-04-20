@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.lang.Math;
 
@@ -23,6 +24,12 @@ public class Satellite extends Entity {
 
         satelliteRect = new Rectangle((int) x, (int) y, w, w);
     }
+
+    public boolean collided(Entity e) {
+        return satelliteRect.intersects(e.getShape().getBounds2D());
+    }
+
+    public final Shape getShape() { return satelliteRect; }
 
     public void draw(Graphics2D g) {
         facing.rotate(ROTATE_VALUE);

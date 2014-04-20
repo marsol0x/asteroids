@@ -47,8 +47,6 @@ public class Asteroids extends JPanel implements KeyListener {
         satellites.add(new Satellite(10, 10));
         pGenerator = ParticleGenerator.getInstance();
         running = true;
-
-        pGenerator.generateExplosion(250.0, 250.0);
     }
 
     public void startGame() { gameLoop(); }
@@ -61,6 +59,13 @@ public class Asteroids extends JPanel implements KeyListener {
             player.move();
             for (Satellite s : satellites) { s.move(); }
             pGenerator.tick();
+
+            // Check for collisions
+            for (Satellite s : satellites) {
+                if (!player.isDead() && s.collided(player)) {
+                    player.kill();
+                }
+            }
 
             // Repaint screen
             repaint();
