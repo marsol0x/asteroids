@@ -21,6 +21,7 @@ public class Asteroids extends JPanel implements KeyListener {
 
     private Ship player;
     private Vector<Satellite> satellites;
+    private ParticleGenerator pGenerator;
     private boolean running;
 
     public Asteroids() {
@@ -44,7 +45,10 @@ public class Asteroids extends JPanel implements KeyListener {
 
         player = new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
         satellites.add(new Satellite(10, 10));
+        pGenerator = ParticleGenerator.getInstance();
         running = true;
+
+        pGenerator.generateExplosion(250.0, 250.0);
     }
 
     public void startGame() { gameLoop(); }
@@ -53,8 +57,12 @@ public class Asteroids extends JPanel implements KeyListener {
         while(running) {
             long start = System.nanoTime();
 
+            // Move game entities
             player.move();
             for (Satellite s : satellites) { s.move(); }
+            pGenerator.tick();
+
+            // Repaint screen
             repaint();
 
             long total = System.nanoTime() - start;
@@ -72,6 +80,7 @@ public class Asteroids extends JPanel implements KeyListener {
 
         player.draw(g2);
         for (Satellite s : satellites) { s.draw(g2); }
+        pGenerator.drawParticles(g2);
     }
 
     @Override
