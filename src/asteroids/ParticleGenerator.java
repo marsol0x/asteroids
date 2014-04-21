@@ -2,17 +2,18 @@ package asteroids;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.lang.Math;
-import java.util.ArrayList;
+import java.util.Vector;
 
 public class ParticleGenerator {
     private static ParticleGenerator instance;
     private static final int NUM_PARTS_EXPLOSION = 16; // Number of particles in an explosion
 
-    private ArrayList<Particle> particles;
+    private Vector<Particle> particles;
 
     private ParticleGenerator() {
-        particles = new ArrayList<Particle>();
+        particles = new Vector<Particle>();
     }
 
     public static final ParticleGenerator getInstance() {
@@ -32,7 +33,7 @@ public class ParticleGenerator {
     }
 
     public void cullParticles() {
-        ArrayList<Particle> deadParticles = new ArrayList<Particle>();
+        Vector<Particle> deadParticles = new Vector<Particle>();
         for (Particle p : particles) {
             if (p.isDead()) { deadParticles.add(p); }
         }
@@ -80,5 +81,8 @@ public class ParticleGenerator {
             g.setColor(Color.WHITE);
             g.drawLine((int)position.x, (int)position.y, (int)position.x, (int)position.y);
         }
+
+        public Shape getShape() { return null; }
+        public boolean collided(Entity e) { return false; }
     }
 }
