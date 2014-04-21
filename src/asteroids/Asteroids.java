@@ -22,6 +22,7 @@ public class Asteroids extends JPanel implements KeyListener {
     private Ship player;
     private Vector<Satellite> satellites;
     private ParticleGenerator pGenerator;
+    private BulletGenerator bGenerator;
     private boolean running;
 
     public Asteroids() {
@@ -46,6 +47,7 @@ public class Asteroids extends JPanel implements KeyListener {
         player = new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
         satellites.add(new Satellite(10, 10));
         pGenerator = ParticleGenerator.getInstance();
+        bGenerator = BulletGenerator.getInstance();
         running = true;
     }
 
@@ -59,6 +61,7 @@ public class Asteroids extends JPanel implements KeyListener {
             player.move();
             for (Satellite s : satellites) { s.move(); }
             pGenerator.tick();
+            bGenerator.tick();
 
             // Check for collisions
             for (Satellite s : satellites) {
@@ -86,6 +89,7 @@ public class Asteroids extends JPanel implements KeyListener {
         player.draw(g2);
         for (Satellite s : satellites) { s.draw(g2); }
         pGenerator.drawParticles(g2);
+        bGenerator.drawBullets(g2);
     }
 
     @Override
