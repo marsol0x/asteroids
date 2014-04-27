@@ -3,6 +3,7 @@ package asteroids;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -13,7 +14,7 @@ public class Satellite extends Entity {
     private static final double ROTATE_VALUE = 2.0; // Slow rotate
     private int w, h;
 
-    private Rectangle satelliteRect;
+    private Polygon satelliteRect;
 
     public Satellite(double x, double y) {
         position = new Vector2(x, y);
@@ -23,13 +24,16 @@ public class Satellite extends Entity {
         this.w = 50;
         this.h = 50;
 
-        satelliteRect = new Rectangle((int) x, (int) y, w, w);
+        satelliteRect = new Polygon(new int[]{0, w, w, 0}, new int[]{0, 0, h, h}, 4);
     }
 
     public boolean collided(Entity e) {
-        return satelliteRect.intersects(e.getShape().getBounds2D());
+        Rectangle bounds = satelliteRect.getBounds();
+        bounds.setLocation((int) position.x, (int) position.y);
+        return bounds.intersects(e.getShape().getBounds2D());
     }
 
+    public final Vector2 getPosition() { return position; }
     public final Shape getShape() { return satelliteRect; }
 
     public void draw(Graphics2D g) {

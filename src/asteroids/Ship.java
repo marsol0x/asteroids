@@ -34,8 +34,8 @@ public class Ship extends Entity implements KeyListener {
     }
 
     private void thrust() {
-        Vector2 acceleration = new Vector2(0.0, -1.0);
-        acceleration.rotateRad(facing.getAngleRad());
+        Vector2 acceleration = new Vector2(0.0, -1.1);
+        acceleration.rotate(facing);
         velocity.add(acceleration);
     }
 
@@ -46,13 +46,17 @@ public class Ship extends Entity implements KeyListener {
     public void kill() {
         dead = true;
         // Explode!
-        ParticleGenerator.getInstance().generateExplosion(prevPosition.x, prevPosition.y);
+        ParticleGenerator.getInstance().generateExplosion(position.x, position.y);
     }
 
     public boolean isDead() { return dead; }
 
     public final Vector2 getPosition() { return position; }
-    public final Shape getShape() { return shipPolygon; }
+    public final Shape getShape() {
+        Rectangle s = shipPolygon.getBounds();
+        s.setLocation((int) position.x, (int) position.y);
+        return s;
+    }
 
     public void move() {
         if (!dead) { super.move(); }
