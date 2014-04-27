@@ -45,7 +45,6 @@ public class Asteroids extends JPanel implements KeyListener {
         satellites = new Vector<Satellite>();
 
         player = new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
-        satellites.add(new Satellite(10, 10));
         pGenerator = ParticleGenerator.getInstance();
         bGenerator = BulletGenerator.getInstance();
         running = true;
@@ -57,19 +56,7 @@ public class Asteroids extends JPanel implements KeyListener {
         while(running) {
             long start = System.nanoTime();
 
-            // Move game entities
-            player.move();
-            for (Satellite s : satellites) { s.move(); }
-            pGenerator.tick();
-            bGenerator.tick();
-
-            // Check for collisions
-            for (Satellite s : satellites) {
-                if (!player.isDead() && s.collided(player)) {
-                    player.kill();
-                }
-            }
-
+            synchronized(this) { tick(); }
             // Repaint screen
             repaint();
 
@@ -77,6 +64,21 @@ public class Asteroids extends JPanel implements KeyListener {
             if ((total / 1000000) < (1000 / MAX_FPS)) {
                 try { Thread.sleep((1000 / MAX_FPS) - (total / 1000000)); }
                 catch(InterruptedException e) {}
+            }
+        }
+    }
+
+    private void tick() {
+        // Move game entities
+        player.move();
+        for (Satellite s : satellites) { s.move(); }
+        pGenerator.tick();
+        bGenerator.tick();
+
+        // Check for collisions
+        for (Satellite s : satellites) {
+            if (!player.isDead() && s.collided(player)) {
+                player.kill();
             }
         }
     }
@@ -94,7 +96,7 @@ public class Asteroids extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        player.keyPressed(e);
+        synchronized(this) { player.keyPressed(e); }
     }
 
     @Override
