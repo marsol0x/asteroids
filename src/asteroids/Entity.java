@@ -9,7 +9,7 @@ abstract public class Entity {
     private final double SPEED_LIMIT = 20.0;
     protected Vector2 velocity;
     protected Vector2 position;
-    protected Vector2 facing;
+    protected double facing;
     protected Vector2 prevPosition;
 
     abstract public void draw(Graphics2D g);
