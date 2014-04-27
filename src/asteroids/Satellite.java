@@ -34,7 +34,12 @@ public class Satellite extends Entity {
     }
 
     public final Vector2 getPosition() { return position; }
-    public final Shape getShape() { return satelliteRect; }
+
+    public final Shape getShape() {
+        Rectangle bounds = satelliteRect.getBounds();
+        bounds.setLocation((int) position.x, (int) position.y);
+        return bounds;
+    }
 
     public void draw(Graphics2D g) {
         g.setColor(Color.WHITE);

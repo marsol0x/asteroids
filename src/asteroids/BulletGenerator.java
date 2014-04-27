@@ -21,6 +21,8 @@ public class BulletGenerator {
         return instance;
     }
 
+    public final Vector<Bullet> getBullets() { return bullets; }
+
     public void tick() {
         for (Bullet b : bullets) {
             b.move();
@@ -61,6 +63,14 @@ public class BulletGenerator {
             tick = ticktoDead;
         }
 
+        public boolean collided(Entity e) {
+            return e.getShape().contains((int) position.x, (int) position.y);
+        }
+
+        public void kill() {
+            dead = true;
+        }
+
         public void tick() {
             tick--;
             if (tick == 0) {
@@ -74,6 +84,5 @@ public class BulletGenerator {
         }
 
         public Shape getShape() { return null; }
-        public boolean collided(Entity e) { return false; }
     }
 }

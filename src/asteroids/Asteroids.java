@@ -76,6 +76,19 @@ public class Asteroids extends JPanel implements KeyListener {
         bGenerator.tick();
 
         // Check for collisions
+        Vector<Satellite> deadSatellites = new Vector<>();
+        for (BulletGenerator.Bullet b : bGenerator.getBullets()) {
+            for (Satellite s : satellites) {
+                if (b.collided(s)) {
+                    pGenerator.generateExplosion(s.getPosition().x, s.getPosition().y);
+                    deadSatellites.add(s);
+                    b.kill();
+                }
+            }
+        }
+        satellites.removeAll(deadSatellites);
+        bGenerator.cullBullets();
+
         for (Satellite s : satellites) {
             if (!player.isDead() && s.collided(player)) {
                 player.kill();
