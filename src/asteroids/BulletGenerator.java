@@ -37,11 +37,10 @@ public class BulletGenerator {
         bullets.removeAll(deadBullets);
     }
 
-    public void shootBullet(double x, double y, double vx, double vy) {
-        Vector2 velocity = new Vector2(vx, vy);
-        Vector2 incVelocity = new Vector2(0.0, 1.0);
+    public void shootBullet(double x, double y, double rot) {
+        Vector2 velocity = new Vector2(0.0, -15.0);
 
-        velocity.add(incVelocity);
+        velocity.rotate(rot);
 
         bullets.add(new Bullet(x, y, velocity.x, velocity.y));
     }
@@ -51,7 +50,7 @@ public class BulletGenerator {
     }
 
     class Bullet extends Entity {
-        private static final int ticktoDead = 120;
+        private static final int ticktoDead = 30;
         public boolean dead;
         private int tick;
 

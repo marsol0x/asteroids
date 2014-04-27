@@ -16,6 +16,7 @@ public class Ship extends Entity implements KeyListener {
     private boolean dead;
     private int w, h;
 
+    private BulletGenerator bGenerator;
     private Polygon shipPolygon;
 
     public Ship(double x, double y) {
@@ -27,6 +28,8 @@ public class Ship extends Entity implements KeyListener {
         this.w = 15;
         this.h = 25;
 
+        bGenerator = BulletGenerator.getInstance();
+
         shipPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
     }
 
@@ -34,6 +37,10 @@ public class Ship extends Entity implements KeyListener {
         Vector2 acceleration = new Vector2(0.0, -1.0);
         acceleration.rotateRad(facing.getAngleRad());
         velocity.add(acceleration);
+    }
+
+    private void shoot() {
+        bGenerator.shootBullet(position.x, position.y, facing);
     }
 
     public void kill() {
@@ -77,6 +84,9 @@ public class Ship extends Entity implements KeyListener {
                 break;
             case KeyEvent.VK_UP:
                 thrust();
+                break;
+            case KeyEvent.VK_SPACE:
+                shoot();
                 break;
         }
     }
