@@ -18,7 +18,6 @@ public class Satellite extends Entity {
 
     public Satellite(double x, double y) {
         position = new Vector2(x, y);
-        prevPosition = new Vector2(x, y);
         velocity = new Vector2(Math.random(), Math.random());
         facing = 0.0;
         this.w = 50;

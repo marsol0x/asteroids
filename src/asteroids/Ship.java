@@ -21,7 +21,6 @@ public class Ship extends Entity implements KeyListener {
 
     public Ship(double x, double y) {
         position = new Vector2(x, y);
-        prevPosition = new Vector2(x, y);
         velocity = new Vector2(0.0, 0.0);
         facing = 0.0;
         dead = false;

@@ -10,7 +10,6 @@ abstract public class Entity {
     protected Vector2 velocity;
     protected Vector2 position;
     protected double facing;
-    protected Vector2 prevPosition;
 
     abstract public void draw(Graphics2D g);
     abstract public boolean collided(Entity e);
