@@ -43,6 +43,13 @@ public class Ship extends Entity implements KeyListener {
         thrustersOn = true;
     }
 
+    private void decelerate() {
+        if (!thrustersOn) {
+            velocity.x *= 0.99;
+            velocity.y *= 0.99;
+        }
+    }
+
     private void shoot() {
         bGenerator.shootBullet(position.x, position.y, facing);
     }
@@ -63,7 +70,10 @@ public class Ship extends Entity implements KeyListener {
     }
 
     public void move() {
-        if (!dead) { super.move(); }
+        if (!dead) {
+            super.move();
+            decelerate();
+        }
     }
 
     public void draw(Graphics2D g) {
