@@ -14,15 +14,18 @@ import java.lang.Math;
 public class Ship extends Entity implements KeyListener {
     private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
     private boolean dead;
+    private boolean thrustersOn;
     private int w, h;
 
     private BulletGenerator bGenerator;
     private Polygon shipPolygon;
+    private Polygon thrusterPolygon;
 
     public Ship(double x, double y) {
         position = new Vector2(x, y);
         velocity = new Vector2(0.0, 0.0);
         facing = 0.0;
+        thrustersOn = false;
         dead = false;
         this.w = 15;
         this.h = 25;
@@ -30,12 +33,14 @@ public class Ship extends Entity implements KeyListener {
         bGenerator = BulletGenerator.getInstance();
 
         shipPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
+        thrusterPolygon = new Polygon(new int[]{0, w / 4, w / 2}, new int[]{0, 8, 0}, 3);
     }
 
     private void thrust() {
         Vector2 acceleration = new Vector2(0.0, -1.1);
         acceleration.rotate(facing);
         velocity.add(acceleration);
+        thrustersOn = true;
     }
 
     private void shoot() {
@@ -71,6 +76,15 @@ public class Ship extends Entity implements KeyListener {
         a.translate(position.x, position.y);
         a.rotate(Math.toRadians(facing));
         g.draw(p.createTransformedShape(a));
+
+        if (thrustersOn) {
+            p = new GeneralPath(thrusterPolygon);
+            a = new AffineTransform();
+            a.translate(position.x, position.y);
+            a.rotate(Math.toRadians(facing));
+            a.translate(-w / 4, h / 2);
+            g.draw(p.createTransformedShape(a));
+        }
     }
 
     public boolean collided(Entity e) { return false; }
@@ -95,7 +109,11 @@ public class Ship extends Entity implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            thrustersOn = false;
+        }
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {}

@@ -113,7 +113,9 @@ public class Asteroids extends JPanel implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+        synchronized(this) { player.keyReleased(e); }
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {}
