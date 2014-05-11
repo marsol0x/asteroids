@@ -118,6 +118,7 @@ public class Asteroids extends JPanel implements KeyListener {
                 player.kill();
                 lives--;
                 setLivesString();
+                if (lives > 0) player = getNewPlayer();
             }
         }
     }
