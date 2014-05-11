@@ -50,4 +50,11 @@ public class Vector2 {
     public double getAngleRad() {
         return Math.atan2(y, x);
     }
+
+    public double dist(Vector2 other) {
+        return Math.sqrt(
+                Math.pow(Math.abs(this.x - other.x), 2) +
+                Math.pow(Math.abs(this.y - other.y), 2)
+               );
+    }
 }
