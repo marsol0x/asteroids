@@ -77,12 +77,23 @@ public class Ship extends Entity implements KeyListener {
         g.draw(getShape());
 
         if (thrustersOn) {
+            // Add a little flicker
+            int xp, yp;
+            xp = thrusterPolygon.xpoints[1];
+            yp = thrusterPolygon.ypoints[1];
+            thrusterPolygon.xpoints[1] = (xp - 2) + (int) (Math.random() * 4 + 1);
+            thrusterPolygon.ypoints[1] = (yp - 2) + (int) (Math.random() * 4 + 1);
+
             GeneralPath p = new GeneralPath(thrusterPolygon);
             AffineTransform a = new AffineTransform();
             a.translate(position.x, position.y);
             a.rotate(Math.toRadians(facing));
             a.translate(-w / 4, h / 2);
             g.draw(p.createTransformedShape(a));
+
+            // Reset thruster tip position
+            thrusterPolygon.xpoints[1] = xp;
+            thrusterPolygon.ypoints[1] = yp;
         }
     }
 
