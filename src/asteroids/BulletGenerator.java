@@ -22,6 +22,10 @@ public class BulletGenerator {
         return instance;
     }
 
+    public void reset() {
+        bullets.clear();
+    }
+
     public final Vector<Bullet> getBullets() { return bullets; }
 
     public void tick() {

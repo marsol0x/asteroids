@@ -24,6 +24,10 @@ public class ParticleGenerator {
         return instance;
     }
 
+    public void reset() {
+        particles.clear();
+    }
+
     public void tick() {
         for (Particle p : particles) {
             p.move();

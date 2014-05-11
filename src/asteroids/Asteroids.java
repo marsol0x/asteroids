@@ -50,7 +50,9 @@ public class Asteroids extends JPanel implements KeyListener {
 
         player = getNewPlayer();
         pGenerator = ParticleGenerator.getInstance();
+        pGenerator.reset();
         bGenerator = BulletGenerator.getInstance();
+        bGenerator.reset();
         running = true;
         score = 0;
         lives = 3;
@@ -149,12 +151,16 @@ public class Asteroids extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        synchronized(this) { player.keyPressed(e); }
+        synchronized(this) {
+            if (!player.isDead()) player.keyPressed(e);
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        synchronized(this) { player.keyReleased(e); }
+        synchronized(this) {
+            if (!player.isDead()) player.keyReleased(e);
+        }
     }
 
     @Override
