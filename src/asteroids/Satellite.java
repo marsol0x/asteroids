@@ -9,7 +9,7 @@ import java.lang.Math;
 public class Satellite extends Entity {
     private static final double ROTATE_VALUE = 2.0; // Slow rotate
 
-    private int w, h, radius;
+    private int radius;
     private Polygon bounds;
     private int sides;
 
@@ -17,10 +17,8 @@ public class Satellite extends Entity {
         position = new Vector2(x, y);
         velocity = new Vector2(Math.random(), Math.random());
         facing = 0.0;
-        this.w = 50;
-        this.h = 50;
         this.sides = sides;
-        radius = w / (12 / sides);
+        radius = 50 * sides / 12;
 
         // Create a hexagon
         entityPolygon  = new Polygon();
@@ -30,6 +28,15 @@ public class Satellite extends Entity {
                     (int) (radius * Math.sin(i * Math.PI * 2 / sides))
             );
         }
+    }
+
+    public Satellite(Satellite source, BulletGenerator.Bullet killer) {
+        this(source.position.x, source.position.y, source.getSides() - 1);
+        velocity = source.velocity.copy();
+
+        Vector2 v = new Vector2(velocity.x, velocity.y);
+        v.rotateRad(killer.velocity.getAngleRad() + Math.random());
+        velocity.add(v);
     }
 
     public boolean collided(Entity e) {

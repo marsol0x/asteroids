@@ -85,10 +85,10 @@ public class Asteroids extends JPanel implements KeyListener {
                     deadSatellites.add(s);
                     b.kill();
 
-                    // If it's a big split it two
-                    if (s.isBig()) {
-                        newSatellites.add(new Satellite((int) s.position.x, (int) s.position.y, false));
-                        newSatellites.add(new Satellite((int) s.position.x, (int) s.position.y, false));
+                    // Remove a side until it's a triangle
+                    if (s.getSides() > 3) {
+                        newSatellites.add(new Satellite(s, b));
+                        newSatellites.add(new Satellite(s, b));
                     }
                 }
             }
