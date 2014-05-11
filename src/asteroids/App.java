@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 public class App {
     public static void main(String[] args) {
-        JFrame window = new JFrame("Asteroids: The Clone");
+        JFrame window = new JFrame("Poly Shooter");
         Asteroids game = new Asteroids();
 
         window.add(game);

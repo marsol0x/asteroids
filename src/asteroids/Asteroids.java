@@ -19,11 +19,13 @@ public class Asteroids extends JPanel implements KeyListener {
     private static final int w = 500;
     private static final int h = 500;
     private static Asteroids instance = null;
+    private Font font;
 
     private Ship player;
     private Vector<Satellite> satellites;
     private ParticleGenerator pGenerator;
     private BulletGenerator bGenerator;
+    private boolean isSplash;
     private boolean running;
     private Integer score;
     private int lives;
@@ -37,7 +39,9 @@ public class Asteroids extends JPanel implements KeyListener {
 
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(w, h));
+        font = new Font("Monospaced", Font.PLAIN, 14);
 
+        isSplash = true;
         newGame();
     }
 
@@ -50,8 +54,9 @@ public class Asteroids extends JPanel implements KeyListener {
 
         player = getNewPlayer();
         pGenerator = ParticleGenerator.getInstance();
-        pGenerator.reset();
         bGenerator = BulletGenerator.getInstance();
+
+        pGenerator.reset();
         bGenerator.reset();
         running = true;
         score = 0;
@@ -59,14 +64,19 @@ public class Asteroids extends JPanel implements KeyListener {
         setLivesString();
     }
 
-    private Ship getNewPlayer() {
-        return new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
+    private void showSplash() {
+        while (isSplash) {
+            repaint();
+        }
     }
 
-    public void startGame() { gameLoop(); }
+    public void startGame() {
+        showSplash();
+        gameLoop();
+    }
 
     private void gameLoop() {
-        while(running) {
+        while (running) {
             long start = System.nanoTime();
 
             synchronized(this) { tick(); }
@@ -123,6 +133,10 @@ public class Asteroids extends JPanel implements KeyListener {
         }
     }
 
+    private Ship getNewPlayer() {
+        return new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
+    }
+
     private void setLivesString() {
         livesStr = "";
         for (int i = 0; i < lives; i++) {
@@ -132,13 +146,27 @@ public class Asteroids extends JPanel implements KeyListener {
 
     private void drawScoreboard(Graphics g) {
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        g.setFont(font);
         g.drawString(score.toString(), 10, 20);
         g.drawString(livesStr, 10, 35);
     }
 
+    private void drawSpash(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Monospaced", Font.PLAIN, 32));
+        g.drawString("POLY SHOOTER", 10, 50);
+        g.setFont(new Font("Monospaced", Font.PLAIN, 20));
+        g.drawString("Press Space to Start", 45, 80);
+    }
+
     public void paint(Graphics g) {
         super.paint(g);
+
+        if (isSplash) {
+            drawSpash(g);
+            return;
+        }
+
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -153,7 +181,11 @@ public class Asteroids extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         synchronized(this) {
-            if (!player.isDead()) player.keyPressed(e);
+            if (isSplash && e.getKeyCode() == KeyEvent.VK_SPACE) {
+                isSplash = false;
+            } else if (!player.isDead()) {
+                player.keyPressed(e);
+            }
         }
     }
 
