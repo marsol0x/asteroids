@@ -25,6 +25,8 @@ public class Satellite extends Entity {
         if (!big) {
             this.w /= 2;
             this.h /= 2;
+            velocity.x *= 1.5;
+            velocity.y *= 1.5;
         }
 
         radius = w / 2;
