@@ -51,6 +51,10 @@ public class ParticleGenerator {
         }
     }
 
+    public void generateParticle(Vector2 position, Vector2 velocity) {
+        particles.add(new Particle(position, velocity));
+    }
+
     public void generateExplosion(Entity source) {
         Vector2 acceleration = new Vector2(0.0, 1.0);
         acceleration.rotate(-source.facing);
@@ -61,7 +65,7 @@ public class ParticleGenerator {
             velocity.add(acceleration);
             velocity.x *= Math.random();
             velocity.y *= Math.random();
-            particles.add(new Particle(source.position.x, source.position.y, velocity.x, velocity.y));
+            particles.add(new Particle(source.position.copy(), velocity.copy()));
         }
     }
 
@@ -70,9 +74,9 @@ public class ParticleGenerator {
         private boolean dead;
         private int tick;
 
-        public Particle(double x, double y, double vx, double vy) {
-            velocity = new Vector2(vx, vy);
-            position = new Vector2(x, y);
+        public Particle(Vector2 position, Vector2 velocity) {
+            this.velocity = velocity;
+            this.position = position;
             dead = false;
             tick = tickToDead;
         }
@@ -85,6 +89,9 @@ public class ParticleGenerator {
             if (tick == 0) {
                 kill();
             }
+            // Decelerate
+            velocity.x *= 0.99;
+            velocity.y *= 0.99;
         }
 
         public void draw(Graphics2D g) {

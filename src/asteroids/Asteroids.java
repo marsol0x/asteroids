@@ -170,10 +170,10 @@ public class Asteroids extends JPanel implements KeyListener {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        player.draw(g2);
         for (Satellite s : satellites) { s.draw(g2); }
         pGenerator.drawParticles(g2);
         bGenerator.drawBullets(g2);
+        player.draw(g2);
 
         drawScoreboard(g);
     }
