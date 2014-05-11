@@ -18,6 +18,7 @@ public class Ship extends Entity implements KeyListener {
     private int w, h;
 
     private BulletGenerator bGenerator;
+    private ParticleGenerator pGenerator;
     private Polygon thrusterPolygon;
 
     public Ship(double x, double y) {
@@ -30,6 +31,7 @@ public class Ship extends Entity implements KeyListener {
         this.h = 25;
 
         bGenerator = BulletGenerator.getInstance();
+        pGenerator = ParticleGenerator.getInstance();
 
         entityPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
         thrusterPolygon = new Polygon(new int[]{0, w / 4, w / 2}, new int[]{0, 8, 0}, 3);
@@ -40,6 +42,18 @@ public class Ship extends Entity implements KeyListener {
         acceleration.rotate(facing);
         velocity.add(acceleration);
         thrustersOn = true;
+
+        // Generate a particle effect on the thrusters
+        Vector2 pVelocity = velocity.copy();
+
+        acceleration.rotate(180.0); // This needs to come out of the back of the ship
+        pVelocity.add(acceleration).add(acceleration); // Applied twice to cancel out the forward acceleration
+
+        for (int i = 0; i < 32; i++) {
+            double vx = pVelocity.x + Math.random();
+            double vy = pVelocity.y + Math.random();
+            pGenerator.generateParticle(position.copy(), new Vector2(vx, vy));
+        }
     }
 
     private void decelerate() {
@@ -73,6 +87,8 @@ public class Ship extends Entity implements KeyListener {
     public void draw(Graphics2D g) {
         if (dead) return; // Don't draw if dead
 
+        g.setColor(Color.BLACK);
+        g.fill(getShape());
         g.setColor(Color.WHITE);
         g.draw(getShape());
 
