@@ -81,7 +81,7 @@ public class Asteroids extends JPanel implements KeyListener {
         for (BulletGenerator.Bullet b : bGenerator.getBullets()) {
             for (Satellite s : satellites) {
                 if (b.collided(s)) {
-                    pGenerator.generateExplosion(s.getPosition().x, s.getPosition().y);
+                    pGenerator.generateExplosion(s);
                     deadSatellites.add(s);
                     b.kill();
 

@@ -8,7 +8,7 @@ import java.util.Vector;
 
 public class ParticleGenerator {
     private static ParticleGenerator instance;
-    private static final int NUM_PARTS_EXPLOSION = 16; // Number of particles in an explosion
+    private static final int NUM_PARTS_EXPLOSION = 32; // Number of particles in an explosion
 
     private Vector<Particle> particles;
 
@@ -47,11 +47,17 @@ public class ParticleGenerator {
         }
     }
 
-    public void generateExplosion(double x, double y) {
-        Vector2 velocity = new Vector2(1.0, 0.0);
+    public void generateExplosion(Entity source) {
+        Vector2 acceleration = new Vector2(0.0, 1.0);
+        acceleration.rotate(-source.facing);
+        double rot = 45.0 / NUM_PARTS_EXPLOSION;
         for (int i = 0; i < NUM_PARTS_EXPLOSION; i++) {
-            particles.add(new Particle(x, y, velocity.x, velocity.y));
-            velocity.rotate(360.0 / NUM_PARTS_EXPLOSION);
+            Vector2 velocity = source.velocity.copy();
+            acceleration.rotate(rot);
+            velocity.add(acceleration);
+            velocity.x *= Math.random();
+            velocity.y *= Math.random();
+            particles.add(new Particle(source.position.x, source.position.y, velocity.x, velocity.y));
         }
     }
 
@@ -78,7 +84,7 @@ public class ParticleGenerator {
         }
 
         public void draw(Graphics2D g) {
-            g.setColor(Color.WHITE);
+            g.setColor(new Color(255 - (tickToDead - tick), Math.random() > 0.5 ? 0 : 165, 0));
             g.drawLine((int)position.x, (int)position.y, (int)position.x, (int)position.y);
         }
 

@@ -57,4 +57,9 @@ public class Vector2 {
                 Math.pow(Math.abs(this.y - other.y), 2)
                );
     }
+
+    public Vector2 copy() {
+        return new Vector2(this.x, this.y);
+    }
+
 }

@@ -56,7 +56,7 @@ public class Ship extends Entity implements KeyListener {
     public void kill() {
         dead = true;
         // Explode!
-        ParticleGenerator.getInstance().generateExplosion(position.x, position.y);
+        ParticleGenerator.getInstance().generateExplosion(this);
     }
 
     public boolean isDead() { return dead; }
