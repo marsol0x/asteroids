@@ -2,6 +2,7 @@ package asteroids;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Shape;
 import java.util.Vector;
 
@@ -64,7 +65,7 @@ public class BulletGenerator {
         }
 
         public boolean collided(Entity e) {
-            return e.getShape().contains((int) position.x, (int) position.y);
+            return e.getShape().getBounds().contains((int) position.x, (int) position.y);
         }
 
         public void kill() {
@@ -82,7 +83,5 @@ public class BulletGenerator {
             g.setColor(Color.WHITE);
             g.drawLine((int) position.x, (int) position.y, (int) position.x, (int) position.y);
         }
-
-        public Shape getShape() { return null; }
     }
 }

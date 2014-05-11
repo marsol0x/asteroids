@@ -82,7 +82,6 @@ public class ParticleGenerator {
             g.drawLine((int)position.x, (int)position.y, (int)position.x, (int)position.y);
         }
 
-        public Shape getShape() { return null; }
         public boolean collided(Entity e) { return false; }
     }
 }

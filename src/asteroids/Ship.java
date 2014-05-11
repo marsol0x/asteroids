@@ -18,7 +18,6 @@ public class Ship extends Entity implements KeyListener {
     private int w, h;
 
     private BulletGenerator bGenerator;
-    private Polygon shipPolygon;
     private Polygon thrusterPolygon;
 
     public Ship(double x, double y) {
@@ -32,7 +31,7 @@ public class Ship extends Entity implements KeyListener {
 
         bGenerator = BulletGenerator.getInstance();
 
-        shipPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
+        entityPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
         thrusterPolygon = new Polygon(new int[]{0, w / 4, w / 2}, new int[]{0, 8, 0}, 3);
     }
 
@@ -63,11 +62,6 @@ public class Ship extends Entity implements KeyListener {
     public boolean isDead() { return dead; }
 
     public final Vector2 getPosition() { return position; }
-    public final Shape getShape() {
-        Rectangle s = shipPolygon.getBounds();
-        s.setLocation((int) position.x, (int) position.y);
-        return s;
-    }
 
     public void move() {
         if (!dead) {
@@ -80,16 +74,11 @@ public class Ship extends Entity implements KeyListener {
         if (dead) return; // Don't draw if dead
 
         g.setColor(Color.WHITE);
-
-        GeneralPath p = new GeneralPath(shipPolygon);
-        AffineTransform a = new AffineTransform();
-        a.translate(position.x, position.y);
-        a.rotate(Math.toRadians(facing));
-        g.draw(p.createTransformedShape(a));
+        g.draw(getShape());
 
         if (thrustersOn) {
-            p = new GeneralPath(thrusterPolygon);
-            a = new AffineTransform();
+            GeneralPath p = new GeneralPath(thrusterPolygon);
+            AffineTransform a = new AffineTransform();
             a.translate(position.x, position.y);
             a.rotate(Math.toRadians(facing));
             a.translate(-w / 4, h / 2);

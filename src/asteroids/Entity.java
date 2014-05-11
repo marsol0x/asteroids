@@ -2,7 +2,10 @@ package asteroids;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
 import java.lang.Math;
 
 abstract public class Entity {
@@ -10,10 +13,19 @@ abstract public class Entity {
     protected Vector2 velocity;
     protected Vector2 position;
     protected double facing;
+    protected Polygon entityPolygon;
 
     abstract public void draw(Graphics2D g);
     abstract public boolean collided(Entity e);
-    abstract public Shape getShape();
+
+    public final Shape getShape() {
+        GeneralPath p = new GeneralPath(entityPolygon);
+        AffineTransform a = new AffineTransform();
+        a.translate(position.x, position.y);
+        a.rotate(Math.toRadians(facing));
+
+        return p.createTransformedShape(a);
+    }
 
     public void move() {
         Dimension d = Asteroids.getInstance().getSize();

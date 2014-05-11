@@ -12,9 +12,10 @@ import java.lang.Math;
 
 public class Satellite extends Entity {
     private static final double ROTATE_VALUE = 2.0; // Slow rotate
-    private int w, h;
+    private static final int POLY_SIDES = 6; // Hexagon
 
-    private Polygon satelliteRect;
+    private int w, h, radius;
+    private Polygon bounds;
 
     public Satellite(double x, double y) {
         position = new Vector2(x, y);
@@ -22,33 +23,30 @@ public class Satellite extends Entity {
         facing = 0.0;
         this.w = 50;
         this.h = 50;
+        radius = w / 2;
 
-        satelliteRect = new Polygon(new int[]{0, w, w, 0}, new int[]{0, 0, h, h}, 4);
+        // Create a hexagon
+        entityPolygon  = new Polygon();
+        for (int i = 0; i < POLY_SIDES; i++) {
+            entityPolygon.addPoint(
+                    (int) (radius * Math.cos(i * Math.PI * 2 / POLY_SIDES)),
+                    (int) (radius * Math.sin(i * Math.PI * 2 / POLY_SIDES))
+            );
+        }
     }
 
     public boolean collided(Entity e) {
-        Rectangle bounds = satelliteRect.getBounds();
-        bounds.setLocation((int) position.x, (int) position.y);
-        return bounds.intersects(e.getShape().getBounds2D());
+        if (position.dist(e.position) >= radius * 2) { return false; }
+
+        return getShape().getBounds().intersects(e.getShape().getBounds());
     }
 
     public final Vector2 getPosition() { return position; }
-
-    public final Shape getShape() {
-        Rectangle bounds = satelliteRect.getBounds();
-        bounds.setLocation((int) position.x, (int) position.y);
-        return bounds;
-    }
 
     public void draw(Graphics2D g) {
         g.setColor(Color.WHITE);
         facing += ROTATE_VALUE;
 
-        GeneralPath p = new GeneralPath(satelliteRect);
-        AffineTransform a = new AffineTransform();
-        a.translate(position.x, position.y);
-        a.rotate(Math.toRadians(facing));
-        a.translate(-w / 2, -h / 2);
-        g.draw(p.createTransformedShape(a));
+        g.draw(getShape());
     }
 }
