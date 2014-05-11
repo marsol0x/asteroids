@@ -2,6 +2,7 @@ package asteroids;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.RenderingHints;
@@ -24,6 +25,9 @@ public class Asteroids extends JPanel implements KeyListener {
     private ParticleGenerator pGenerator;
     private BulletGenerator bGenerator;
     private boolean running;
+    private Integer score;
+    private int lives;
+    private String livesStr;
 
     public Asteroids() {
         // Use a static instance so that we can check state
@@ -44,10 +48,17 @@ public class Asteroids extends JPanel implements KeyListener {
     private void newGame() {
         satellites = new Vector<>();
 
-        player = new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
+        player = getNewPlayer();
         pGenerator = ParticleGenerator.getInstance();
         bGenerator = BulletGenerator.getInstance();
         running = true;
+        score = 0;
+        lives = 3;
+        setLivesString();
+    }
+
+    private Ship getNewPlayer() {
+        return new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
     }
 
     public void startGame() { gameLoop(); }
@@ -85,6 +96,9 @@ public class Asteroids extends JPanel implements KeyListener {
                     deadSatellites.add(s);
                     b.kill();
 
+                    // Score!
+                    score += s.getSides() * 10;
+
                     // Remove a side until it's a triangle
                     if (s.getSides() > 3) {
                         newSatellites.add(new Satellite(s, b));
@@ -100,8 +114,24 @@ public class Asteroids extends JPanel implements KeyListener {
         for (Satellite s : satellites) {
             if (!player.isDead() && s.collided(player)) {
                 player.kill();
+                lives--;
+                setLivesString();
             }
         }
+    }
+
+    private void setLivesString() {
+        livesStr = "";
+        for (int i = 0; i < lives; i++) {
+            livesStr += "* ";
+        }
+    }
+
+    private void drawScoreboard(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        g.drawString(score.toString(), 10, 20);
+        g.drawString(livesStr, 10, 35);
     }
 
     public void paint(Graphics g) {
@@ -113,6 +143,8 @@ public class Asteroids extends JPanel implements KeyListener {
         for (Satellite s : satellites) { s.draw(g2); }
         pGenerator.drawParticles(g2);
         bGenerator.drawBullets(g2);
+
+        drawScoreboard(g);
     }
 
     @Override
