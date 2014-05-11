@@ -42,7 +42,7 @@ public class Asteroids extends JPanel implements KeyListener {
     }
 
     private void newGame() {
-        satellites = new Vector<Satellite>();
+        satellites = new Vector<>();
 
         player = new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
         pGenerator = ParticleGenerator.getInstance();
@@ -77,16 +77,24 @@ public class Asteroids extends JPanel implements KeyListener {
 
         // Check for collisions
         Vector<Satellite> deadSatellites = new Vector<>();
+        Vector<Satellite> newSatellites = new Vector<>();
         for (BulletGenerator.Bullet b : bGenerator.getBullets()) {
             for (Satellite s : satellites) {
                 if (b.collided(s)) {
                     pGenerator.generateExplosion(s.getPosition().x, s.getPosition().y);
                     deadSatellites.add(s);
                     b.kill();
+
+                    // If it's a big split it two
+                    if (s.isBig()) {
+                        newSatellites.add(new Satellite((int) s.position.x, (int) s.position.y, false));
+                        newSatellites.add(new Satellite((int) s.position.x, (int) s.position.y, false));
+                    }
                 }
             }
         }
         satellites.removeAll(deadSatellites);
+        satellites.addAll(newSatellites);
         bGenerator.cullBullets();
 
         for (Satellite s : satellites) {
