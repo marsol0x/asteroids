@@ -42,18 +42,6 @@ public class Ship extends Entity implements KeyListener {
         acceleration.rotate(facing);
         velocity.add(acceleration);
         thrustersOn = true;
-
-        // Generate a particle effect on the thrusters
-        Vector2 pVelocity = velocity.copy();
-
-        acceleration.rotate(180.0); // This needs to come out of the back of the ship
-        pVelocity.add(acceleration).add(acceleration); // Applied twice to cancel out the forward acceleration
-
-        for (int i = 0; i < 32; i++) {
-            double vx = pVelocity.x + Math.random();
-            double vy = pVelocity.y + Math.random();
-            pGenerator.generateParticle(position.copy(), new Vector2(vx, vy));
-        }
     }
 
     private void decelerate() {
@@ -81,6 +69,21 @@ public class Ship extends Entity implements KeyListener {
         if (!dead) {
             super.move();
             decelerate();
+
+            if (thrustersOn) {
+                // Generate a particle effect on the thrusters
+                Vector2 pVelocity = velocity.copy();
+                Vector2 acceleration = new Vector2(0.0, -1.1);
+                acceleration.rotate(facing);
+                acceleration.rotate(180.0); // This needs to come out of the back of the ship
+                pVelocity.add(acceleration).add(acceleration); // Applied twice to cancel out the forward acceleration
+
+                for (int i = 0; i < 32; i++) {
+                    double vx = pVelocity.x + (Math.random() * (0.5) + 0.1) - 0.25;
+                    double vy = pVelocity.y + (Math.random() * (0.5) + 0.1) - 0.25;
+                    pGenerator.generateParticle(position.copy(), new Vector2(vx, vy));
+                }
+            }
         }
     }
 
