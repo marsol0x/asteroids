@@ -151,7 +151,7 @@ public class Asteroids extends JPanel implements KeyListener {
         g.drawString(livesStr, 10, 35);
     }
 
-    private void drawSpash(Graphics g) {
+    private void drawSplash(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Monospaced", Font.PLAIN, 32));
         g.drawString("POLY SHOOTER", 10, 50);
@@ -163,7 +163,7 @@ public class Asteroids extends JPanel implements KeyListener {
         super.paint(g);
 
         if (isSplash) {
-            drawSpash(g);
+            drawSplash(g);
             return;
         }
 
