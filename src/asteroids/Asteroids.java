@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.InterruptedException;
+import java.util.Random;
 import java.util.Vector;
 import javax.swing.JPanel;
 
@@ -31,6 +32,7 @@ public class Asteroids extends JPanel implements KeyListener {
     private Integer score;
     private int lives;
     private String livesStr;
+    private int level;
 
     private Rectangle playerArea;
 
@@ -69,7 +71,9 @@ public class Asteroids extends JPanel implements KeyListener {
         running = true;
         score = 0;
         lives = 3;
+        level = 1;
         setLivesString();
+        generateSatellites(level);
     }
 
     private void showSplash() {
@@ -87,7 +91,16 @@ public class Asteroids extends JPanel implements KeyListener {
         while (running) {
             long start = System.nanoTime();
 
-            synchronized(this) { tick(); }
+            synchronized(this) {
+                tick();
+
+                // Check if all satellites have been destroyed, if so, new
+                // level
+                if (satellites.isEmpty()) {
+                    level++;
+                    generateSatellites(level);
+                }
+            }
             // Repaint screen
             repaint();
 
@@ -136,13 +149,25 @@ public class Asteroids extends JPanel implements KeyListener {
                 player.kill();
                 lives--;
                 setLivesString();
-                if (lives > 0) player = getNewPlayer();
+                break;
             }
+        }
+
+        if (player.isDead() && lives > 0) {
+            player = getNewPlayer();
         }
     }
 
     private Ship getNewPlayer() {
-        return new Ship(getPreferredSize().getWidth() / 2, getPreferredSize().getHeight() / 2);
+        double x = getPreferredSize().getWidth() / 2;
+        double y = getPreferredSize().getHeight() / 2;
+
+        for (Satellite s : satellites) {
+            if (playerArea.contains((int) s.getPosition().x, (int) s.getPosition().y)) {
+                return player; // Return the old, dead player to be checked again
+            }
+        }
+        return new Ship(x, y);
     }
 
     private void setLivesString() {
@@ -184,6 +209,22 @@ public class Asteroids extends JPanel implements KeyListener {
         player.draw(g2);
 
         drawScoreboard(g);
+    }
+
+    private void generateSatellites(int level) {
+        int total = 3 + level;
+        Random rand = new Random();
+
+        while (total > 0) {
+            // Spawn a satellite 6-sided satellite, but outside of the player
+            // area
+            int x = rand.nextInt(w + 1);
+            int y = rand.nextInt(h + 1);
+            if (playerArea.contains(x, y)) { continue; } // Try again
+
+            satellites.add(new Satellite(x, y, 6));
+            total--;
+        }
     }
 
     @Override
