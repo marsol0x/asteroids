@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -31,6 +32,8 @@ public class Asteroids extends JPanel implements KeyListener {
     private int lives;
     private String livesStr;
 
+    private Rectangle playerArea;
+
     public Asteroids() {
         // Use a static instance so that we can check state
         if (Asteroids.instance == null) {
@@ -40,6 +43,11 @@ public class Asteroids extends JPanel implements KeyListener {
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(w, h));
         font = new Font("Monospaced", Font.PLAIN, 14);
+
+        // Player area, so that Satellites don't spawn in this area
+        playerArea = new Rectangle((int) (getPreferredSize().getWidth() / 2) - (Ship.w * 3),
+                                   (int) (getPreferredSize().getHeight() / 2) - (Ship.h * 3),
+                                   Ship.w * 6, Ship.h * 6);
 
         isSplash = true;
         newGame();
