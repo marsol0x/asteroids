@@ -8,7 +8,7 @@ import java.util.Vector;
 
 public class ParticleGenerator {
     private static ParticleGenerator instance;
-    private static final int NUM_PARTS_EXPLOSION = 32; // Number of particles in an explosion
+    private static final int NUM_PARTS_EXPLOSION = 128; // Number of particles in an explosion
 
     private Vector<Particle> particles;
 
