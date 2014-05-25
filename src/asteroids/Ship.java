@@ -12,10 +12,12 @@ import java.awt.geom.GeneralPath;
 import java.lang.Math;
 
 public class Ship extends Entity implements KeyListener {
+    public static final int w = 15;
+    public static final int h = 25;
     private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
+
     private boolean dead;
     private boolean thrustersOn;
-    private int w, h;
 
     private BulletGenerator bGenerator;
     private ParticleGenerator pGenerator;
@@ -27,8 +29,6 @@ public class Ship extends Entity implements KeyListener {
         facing = 0.0;
         thrustersOn = false;
         dead = false;
-        this.w = 15;
-        this.h = 25;
 
         bGenerator = BulletGenerator.getInstance();
         pGenerator = ParticleGenerator.getInstance();
