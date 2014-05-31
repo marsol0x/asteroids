@@ -97,7 +97,7 @@ public class Ship extends Entity implements KeyListener {
                 // Generate a particle effect on the thrusters
                 Vector2 pPosition = position.copy();
                 Vector2 pVelocity = velocity.copy();
-                Vector2 acceleration = new Vector2(0.0, THRUST_VALUE * 2);
+                Vector2 acceleration = new Vector2(0.0, THRUST_VALUE * 3);
 
                 // This is a mess because I'm technically doing a game->screen
                 // translation myself
