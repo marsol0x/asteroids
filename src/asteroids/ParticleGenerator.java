@@ -70,8 +70,8 @@ public class ParticleGenerator {
     }
 
     class Particle extends Entity {
-        private static final int tickToDeadMin = 45;
-        private static final int tickToDeadMax = 60;
+        private static final int tickToDeadMin = 23;
+        private static final int tickToDeadMax = 30;
         private boolean dead;
         private int tick;
         private int tickToDead;
