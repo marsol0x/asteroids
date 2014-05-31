@@ -70,14 +70,17 @@ public class ParticleGenerator {
     }
 
     class Particle extends Entity {
-        private static final int tickToDead = 60;
+        private static final int tickToDeadMin = 45;
+        private static final int tickToDeadMax = 60;
         private boolean dead;
         private int tick;
+        private int tickToDead;
 
         public Particle(Vector2 position, Vector2 velocity) {
             this.velocity = velocity;
             this.position = position;
             dead = false;
+            tickToDead = tickToDeadMin + (int) (Math.random() * (tickToDeadMax - tickToDeadMin));
             tick = tickToDead;
         }
 
