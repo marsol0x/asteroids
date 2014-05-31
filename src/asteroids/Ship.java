@@ -95,8 +95,20 @@ public class Ship extends Entity implements KeyListener {
 
             if (thrustersOn) {
                 // Generate a particle effect on the thrusters
+                Vector2 pPosition = position.copy();
                 Vector2 pVelocity = velocity.copy();
                 Vector2 acceleration = new Vector2(0.0, THRUST_VALUE * 2);
+
+                // This is a mess because I'm technically doing a game->screen
+                // translation myself
+                double x = pPosition.x;
+                double y = pPosition.y;
+                pPosition.x = 0;
+                pPosition.y = (h / 2.0) + (thrusterPolygon.ypoints[1] / 2);
+                pPosition.rotate(facing);
+                pPosition.x += x;
+                pPosition.y += y;
+
                 acceleration.rotate(facing);
                 acceleration.rotate(180.0); // This needs to come out of the back of the ship
                 pVelocity.add(acceleration);
@@ -104,7 +116,7 @@ public class Ship extends Entity implements KeyListener {
                 for (int i = 0; i < THRUST_PARTICLES; i++) {
                     double vx = pVelocity.x + (Math.random() * (0.5) + 0.1) - 0.25;
                     double vy = pVelocity.y + (Math.random() * (0.5) + 0.1) - 0.25;
-                    pGenerator.generateParticle(position.copy(), new Vector2(vx, vy));
+                    pGenerator.generateParticle(pPosition.copy(), new Vector2(vx, vy));
                 }
             }
         }
