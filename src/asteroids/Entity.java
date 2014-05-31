@@ -9,7 +9,7 @@ import java.awt.geom.GeneralPath;
 import java.lang.Math;
 
 abstract public class Entity {
-    private final double SPEED_LIMIT = 20.0;
+    private final double SPEED_LIMIT = 15.0;
     protected Vector2 velocity;
     protected Vector2 position;
     protected double facing;
