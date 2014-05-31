@@ -14,34 +14,38 @@ import java.lang.Math;
 public class Ship extends Entity implements KeyListener {
     public static final int w = 15;
     public static final int h = 25;
-    private static final double ROTATE_VALUE = 22.5; // ~ PI / 8
+    private static final double ROTATE_VALUE = 11.25;
 
-    private boolean dead;
-    private boolean thrustersOn;
+    private boolean dead = false;
 
     private BulletGenerator bGenerator;
     private ParticleGenerator pGenerator;
     private Polygon thrusterPolygon;
 
+
+    // Controller stuff
+    private Controller movement;
+    private boolean thrustersOn = false;
+    private boolean isShooting = false;
+
     public Ship(double x, double y) {
         position = new Vector2(x, y);
         velocity = new Vector2(0.0, 0.0);
         facing = 0.0;
-        thrustersOn = false;
-        dead = false;
 
         bGenerator = BulletGenerator.getInstance();
         pGenerator = ParticleGenerator.getInstance();
 
         entityPolygon = new Polygon(new int[]{0, -w / 2, w / 2}, new int[]{-h / 2, h / 2, h / 2}, 3);
         thrusterPolygon = new Polygon(new int[]{0, w / 4, w / 2}, new int[]{0, 8, 0}, 3);
+
+        movement = new Controller();
     }
 
     private void thrust() {
         Vector2 acceleration = new Vector2(0.0, -1.1);
         acceleration.rotate(facing);
         velocity.add(acceleration);
-        thrustersOn = true;
     }
 
     private void decelerate() {
@@ -65,6 +69,23 @@ public class Ship extends Entity implements KeyListener {
 
     public final Vector2 getPosition() { return position; }
 
+    public void tick() {
+        // Movement
+        switch (movement.getKey()) {
+            case LEFT:
+                facing -= ROTATE_VALUE;
+                break;
+            case RIGHT:
+                facing += ROTATE_VALUE;
+                break;
+        }
+
+        // Check trusters
+        if (thrustersOn) thrust();
+
+        move();
+    }
+
     public void move() {
         if (!dead) {
             super.move();
@@ -73,7 +94,7 @@ public class Ship extends Entity implements KeyListener {
             if (thrustersOn) {
                 // Generate a particle effect on the thrusters
                 Vector2 pVelocity = velocity.copy();
-                Vector2 acceleration = new Vector2(0.0, -1.1);
+                Vector2 acceleration = new Vector2(0.0, -0.5);
                 acceleration.rotate(facing);
                 acceleration.rotate(180.0); // This needs to come out of the back of the ship
                 pVelocity.add(acceleration).add(acceleration); // Applied twice to cancel out the forward acceleration
@@ -123,13 +144,13 @@ public class Ship extends Entity implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()){
             case KeyEvent.VK_LEFT:
-                facing -= ROTATE_VALUE;
+                movement.setKey(Keys.LEFT);
                 break;
             case KeyEvent.VK_RIGHT:
-                facing += ROTATE_VALUE;
+                movement.setKey(Keys.RIGHT);
                 break;
             case KeyEvent.VK_UP:
-                thrust();
+                thrustersOn = true;
                 break;
             case KeyEvent.VK_SPACE:
                 shoot();
@@ -139,8 +160,14 @@ public class Ship extends Entity implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            thrustersOn = false;
+        switch(e.getKeyCode()){
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_RIGHT:
+                movement.clearKey();
+                break;
+            case KeyEvent.VK_UP:
+                thrustersOn = false;
+                break;
         }
     }
 

@@ -114,7 +114,7 @@ public class Asteroids extends JPanel implements KeyListener {
 
     private void tick() {
         // Move game entities
-        player.move();
+        player.tick();
         for (Satellite s : satellites) { s.move(); }
         pGenerator.tick();
         bGenerator.tick();
@@ -218,6 +218,8 @@ public class Asteroids extends JPanel implements KeyListener {
         while (total > 0) {
             // Spawn a satellite 6-sided satellite, but outside of the player
             // area
+            // TODO: The playerArea will need to move at the start of new
+            //       levels, if the player isn't reset to the center
             int x = rand.nextInt(w + 1);
             int y = rand.nextInt(h + 1);
             if (playerArea.contains(x, y)) { continue; } // Try again
